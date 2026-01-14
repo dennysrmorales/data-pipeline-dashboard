@@ -84,6 +84,14 @@ async def get_summary():
     """Get summary statistics and sample data."""
     try:
         df = load_dataset()
+        dataset_path = get_latest_dataset()
+        
+        # Extract source filename from processed file name
+        # e.g., "fifa_eda_stats.parquet" -> "fifa_eda_stats.csv"
+        source_filename = None
+        if dataset_path:
+            # Remove .parquet extension and assume .csv source
+            source_filename = dataset_path.stem + ".csv"
         
         # Get sample (first 10 rows)
         sample_df = df.head(10)
@@ -92,7 +100,8 @@ async def get_summary():
             total_rows=len(df),
             columns=df.columns,
             column_types={col: str(df[col].dtype) for col in df.columns},
-            sample_data=sample_df.to_dicts()
+            sample_data=sample_df.to_dicts(),
+            source_filename=source_filename
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error loading summary: {str(e)}")

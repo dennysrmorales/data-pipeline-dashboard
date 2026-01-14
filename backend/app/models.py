@@ -24,6 +24,7 @@ class DataSummary(BaseModel):
     columns: List[str]
     column_types: Dict[str, str]
     sample_data: List[Dict[str, Any]]
+    source_filename: Optional[str] = None
 
 
 class SchemaResponse(BaseModel):

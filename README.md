@@ -92,17 +92,32 @@ date,category,value,count
 
 Process raw data into clean, structured datasets:
 
+**Process all files** (default):
 ```bash
 cd pipeline
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 python pipeline.py
 ```
 
-This will:
-- Load all CSV/Parquet files from `raw_data/`
+**Process a specific file**:
+```bash
+cd pipeline
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+python pipeline.py -f sample_data.csv
+# or
+python pipeline.py --file fifa_eda_stats.csv
+```
+
+The pipeline will:
+- Load CSV/Parquet files from `raw_data/` (all files, or the specified file)
 - Validate and transform the data
 - Save processed Parquet files to `processed_data/`
 - Generate schema metadata files
+
+**See help**:
+```bash
+python pipeline.py --help
+```
 
 ### Step 3: Start Backend Server
 

@@ -12,8 +12,24 @@
   color: #333;
 }
 
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.chart-item {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  background: #fafafa;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
 .chart-wrapper {
-  margin: 2rem 0;
+  margin: 1rem 0;
 }
 
 .chart-placeholder {
@@ -28,6 +44,7 @@
   font-size: 0.9rem;
   color: #666;
   text-align: center;
+  font-weight: 500;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -37,6 +54,11 @@
   
   .chart-container h2 {
     color: #eee;
+  }
+  
+  .chart-item {
+    background: #252525;
+    border-color: #333;
   }
   
   .chart-placeholder {

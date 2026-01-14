@@ -12,6 +12,7 @@ import polars as pl
 from pathlib import Path
 from typing import Optional
 import json
+import argparse
 
 
 class DataPipeline:
@@ -65,8 +66,10 @@ class DataPipeline:
         # Example transformation: ensure proper types and add computed fields
         # Customize this based on your actual data schema
         
-        # Remove nulls and normalize
-        df = df.filter(pl.all_horizontal(pl.col("*").is_not_null()))
+        # Remove rows where ALL columns are null (truly empty rows only)
+        # Note: We keep rows with some nulls - real-world datasets have optional fields
+        # Only filter out rows that are completely empty
+        df = df.filter(pl.any_horizontal(pl.col("*").is_not_null()))
         
         # If there are date columns, parse them
         # df = df.with_columns(pl.col("date").str.to_date())
@@ -118,23 +121,58 @@ class DataPipeline:
 
 def main():
     """Run the pipeline on available raw data files."""
+    parser = argparse.ArgumentParser(
+        description='Process raw data files into processed datasets',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog='''
+Examples:
+  python pipeline.py                    # Process all CSV/Parquet files
+  python pipeline.py -f sample_data.csv # Process only sample_data.csv
+  python pipeline.py --file fifa_eda_stats.csv  # Process only fifa_eda_stats.csv
+        '''
+    )
+    parser.add_argument(
+        '-f', '--file',
+        type=str,
+        help='Specific file to process (e.g., sample_data.csv). If not specified, processes all files.'
+    )
+    
+    args = parser.parse_args()
     pipeline = DataPipeline()
     
-    # Find all CSV and Parquet files in raw_data directory
-    raw_files = []
-    for ext in ['*.csv', '*.parquet']:
-        raw_files.extend(pipeline.raw_data_dir.glob(ext))
-    
-    if not raw_files:
-        print("No raw data files found. Place CSV or Parquet files in the raw_data/ directory.")
-        return
-    
-    # Process each file
-    for raw_file in raw_files:
+    if args.file:
+        # Process only the specified file
+        filename = args.file
+        file_path = pipeline.raw_data_dir / filename
+        
+        if not file_path.exists():
+            print(f"Error: File '{filename}' not found in {pipeline.raw_data_dir}")
+            print(f"Available files:")
+            for ext in ['*.csv', '*.parquet']:
+                for f in pipeline.raw_data_dir.glob(ext):
+                    print(f"  - {f.name}")
+            return
+        
         try:
-            pipeline.process_file(raw_file.name)
+            pipeline.process_file(filename)
         except Exception as e:
-            print(f"Error processing {raw_file.name}: {e}")
+            print(f"Error processing {filename}: {e}")
+    else:
+        # Process all CSV and Parquet files in raw_data directory
+        raw_files = []
+        for ext in ['*.csv', '*.parquet']:
+            raw_files.extend(pipeline.raw_data_dir.glob(ext))
+        
+        if not raw_files:
+            print("No raw data files found. Place CSV or Parquet files in the raw_data/ directory.")
+            return
+        
+        # Process each file
+        for raw_file in raw_files:
+            try:
+                pipeline.process_file(raw_file.name)
+            except Exception as e:
+                print(f"Error processing {raw_file.name}: {e}")
 
 
 if __name__ == "__main__":
