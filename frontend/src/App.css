@@ -1,0 +1,63 @@
+.app {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.app-header {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.app-header h1 {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.app-header p {
+  color: #666;
+  font-size: 1.2rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+  color: #667eea;
+}
+
+.error-message {
+  background-color: #fee;
+  border: 1px solid #fcc;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 2rem 0;
+  color: #c33;
+}
+
+.no-data {
+  text-align: center;
+  padding: 3rem;
+  color: #999;
+  font-size: 1.1rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  .app-header p {
+    color: #aaa;
+  }
+  
+  .error-message {
+    background-color: #300;
+    border-color: #500;
+    color: #f99;
+  }
+  
+  .no-data {
+    color: #666;
+  }
+}

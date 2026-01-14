@@ -1,0 +1,49 @@
+.chart-container {
+  margin: 3rem 0;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.chart-container h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.chart-wrapper {
+  margin: 2rem 0;
+}
+
+.chart-placeholder {
+  text-align: center;
+  padding: 3rem;
+  color: #999;
+  font-style: italic;
+}
+
+.chart-note {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #666;
+  text-align: center;
+}
+
+@media (prefers-color-scheme: dark) {
+  .chart-container {
+    background: #1a1a1a;
+  }
+  
+  .chart-container h2 {
+    color: #eee;
+  }
+  
+  .chart-placeholder {
+    color: #666;
+  }
+  
+  .chart-note {
+    color: #aaa;
+  }
+}
